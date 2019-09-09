@@ -10,7 +10,7 @@ An executable to calculate the total cost of a list of csv file calls.
  ### Compiling the project and genereate executable
   After you configure your machine with elixir, you have to compile the project and generate the executable. to do so, you can run:
   ```sh
-  $ mix compile
+  $ mix escript.build
   ```
 
 ## Running tests
