@@ -20,7 +20,7 @@ An executable to calculate the total cost of a list of csv file calls.
   ```
 
 ## Usage
-  To calculate a csv files with all the calls data, you can pass the file path to arguments of the executable. just running:
+  To calculate a csv file with all the calls data, you can pass the file path to arguments of the executable. just running:
   ```sh
   $ ./calls /path/to/file.csv
   ```
