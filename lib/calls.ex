@@ -11,7 +11,7 @@ defmodule Calls do
     |> IO.puts()
   end
 
-  def main(_args), do: IO.puts("Invalid arguments")
+  def main(_arguments), do: IO.puts("Invalid arguments")
 
   @spec parse_parameters(binary | maybe_improper_list(binary | maybe_improper_list(any, binary | []) | char, binary | [])) :: :ok | [binary]
   def parse_parameters(csv_file_path) do
