@@ -131,15 +131,15 @@ defmodule Calls.CallTest do
       }
 
       assert capture_io(fn ->
-        Call.calculate_cost(call)
-      end) == "Call struct don't have minutes_of_duration key\n"
+               Call.calculate_cost(call)
+             end) == "Call struct don't have minutes_of_duration key\n"
     end
 
     test "should print a error message when not receive a call struct" do
       Enum.each(@invalid_parameters, fn parameter ->
         assert capture_io(fn ->
-          Call.calculate_cost(parameter)
-        end) == "Parameter is not a call struct\n"
+                 Call.calculate_cost(parameter)
+               end) == "Parameter is not a call struct\n"
       end)
     end
   end
