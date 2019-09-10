@@ -19,8 +19,8 @@ defmodule Calls.Call do
 
   def new(_parameters), do: {:error, :invalid_call}
 
-  @spec calcutate_duration(Calls.Call.t()) :: Calls.Call.t()
-  def calcutate_duration(%Call{} = call) do
+  @spec calculate_duration(Calls.Call.t()) :: Calls.Call.t()
+  def calculate_duration(%Call{} = call) do
     time_of_duration =
       call.time_of_finish
       |> Time.diff(call.time_of_start)
@@ -29,9 +29,21 @@ defmodule Calls.Call do
     %Call{call | minutes_of_duration: time_of_duration}
   end
 
+  def calculate_duration(_call) do
+    IO.puts("Parameter is not a call struct")
+  end
+
   @spec calculate_cost(Calls.Call.t()) :: Calls.Call.t()
+  def calculate_cost(%Call{minutes_of_duration: nil}) do
+    IO.puts("Call struct don't have minutes_of_duration key")
+  end
+
   def calculate_cost(%Call{minutes_of_duration: minutes_of_duration} = call) do
     %Call{call | total_cost: cost_by_minute(minutes_of_duration)}
+  end
+
+  def calculate_cost(_call) do
+    IO.puts("Parameter is not a call struct")
   end
 
   defp parse_parameters(parameters) do
@@ -43,7 +55,7 @@ defmodule Calls.Call do
       parameters = put_in(parameters[:time_of_finish], time_of_finish)
 
       {:ok, parameters}
-    catch
+    rescue
       _ -> {:error, :invalid_call}
     end
   end

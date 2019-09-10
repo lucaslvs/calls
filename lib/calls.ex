@@ -3,17 +3,29 @@ defmodule Calls do
 
   @spec main(any) :: :ok
   def main([csv_file_path]) do
-    csv_file_path
-    |> parse_parameters()
-    |> create_and_calculate_calls()
-    |> disregard_longer_call()
-    |> calculate_total_cost_of_calls()
-    |> IO.puts()
+    try do
+      csv_file_path
+      |> parse_parameters()
+      |> create_and_calculate_calls()
+      |> disregard_longer_call()
+      |> calculate_total_cost_of_calls()
+      |> IO.puts()
+    rescue
+      _ -> System.halt(1)
+    end
   end
 
-  def main(_arguments), do: IO.puts("Invalid arguments")
+  def main(_arguments) do
+    IO.puts("Invalid arguments")
+  end
 
-  @spec parse_parameters(binary | maybe_improper_list(binary | maybe_improper_list(any, binary | []) | char, binary | [])) :: :ok | [binary]
+  @spec parse_parameters(
+          binary
+          | maybe_improper_list(
+              binary | maybe_improper_list(any, binary | []) | char,
+              binary | []
+            )
+        ) :: :ok | [binary]
   def parse_parameters(csv_file_path) do
     case File.read(csv_file_path) do
       {:ok, content} ->
@@ -74,13 +86,19 @@ defmodule Calls do
 
       {:error, :invalid_call} ->
         IO.puts("Invalid call register")
+        System.halt(1)
     end
+  end
+
+  def create_call(_parameter) do
+    IO.puts("Invalid call register")
+    System.halt(1)
   end
 
   @spec calculate_duration_and_cost_call(Calls.Call.t()) :: Calls.Call.t()
   def calculate_duration_and_cost_call(%Call{} = call) do
     call
-    |> Call.calcutate_duration()
+    |> Call.calculate_duration()
     |> Call.calculate_cost()
   end
 
