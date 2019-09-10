@@ -1,6 +1,7 @@
 defmodule Calls do
   alias Calls.Call
 
+  @spec main(any) :: :ok
   def main([csv_file_path]) do
     csv_file_path
     |> parse_parameters()
@@ -12,6 +13,7 @@ defmodule Calls do
 
   def main(_args), do: IO.puts("Invalid arguments")
 
+  @spec parse_parameters(binary | maybe_improper_list(binary | maybe_improper_list(any, binary | []) | char, binary | [])) :: :ok | [binary]
   def parse_parameters(csv_file_path) do
     case File.read(csv_file_path) do
       {:ok, content} ->
@@ -28,6 +30,7 @@ defmodule Calls do
     end
   end
 
+  @spec create_and_calculate_calls(any) :: :ok | [any]
   def create_and_calculate_calls(calls_parameters) do
     if Enum.empty?(calls_parameters) do
       IO.puts("The file has no calls")
@@ -38,12 +41,14 @@ defmodule Calls do
     end
   end
 
+  @spec proccess_call_async(any) :: Task.t()
   def proccess_call_async(call) do
     Task.async(fn ->
       calculate_duration_and_cost_call(call)
     end)
   end
 
+  @spec calculate_duration_and_cost_call(<<_::360>>) :: Calls.Call.t()
   def calculate_duration_and_cost_call(call) do
     call
     |> create_call()
@@ -51,6 +56,7 @@ defmodule Calls do
     |> Call.calculate_cost()
   end
 
+  @spec create_call(<<_::360>>) :: :ok | Calls.Call.t()
   def create_call(
         <<time_of_start::bytes-size(8)>> <>
           ";" <>
@@ -77,12 +83,14 @@ defmodule Calls do
     end
   end
 
+  @spec disregard_longer_call(any) :: [Calls.Call.t()]
   def disregard_longer_call(calls) do
     calls
     |> Enum.sort_by(& &1.minutes_of_duration)
     |> Enum.drop(-1)
   end
 
+  @spec calculate_total_cost_of_calls(any) :: number
   def calculate_total_cost_of_calls(calls) do
     calls
     |> Enum.map(& &1.total_cost)

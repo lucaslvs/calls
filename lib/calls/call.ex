@@ -6,6 +6,7 @@ defmodule Calls.Call do
 
   defstruct @enforce_keys ++ @keys
 
+  @spec new(any) :: {:error, :invalid_call} | {:ok, Calls.Call.t()}
   def new(parameters) when is_list(parameters) or is_map(parameters) do
     case parse_parameters(parameters) do
       {:ok, parameters} ->
@@ -18,6 +19,7 @@ defmodule Calls.Call do
 
   def new(_parameters), do: {:error, :invalid_call}
 
+  @spec calcutate_duration(Calls.Call.t()) :: Calls.Call.t()
   def calcutate_duration(%Call{} = call) do
     time_of_duration =
       call.time_of_finish
@@ -27,6 +29,7 @@ defmodule Calls.Call do
     %Call{call | minutes_of_duration: time_of_duration}
   end
 
+  @spec calculate_cost(Calls.Call.t()) :: Calls.Call.t()
   def calculate_cost(%Call{minutes_of_duration: minutes_of_duration} = call) do
     %Call{call | total_cost: cost_by_minute(minutes_of_duration)}
   end
