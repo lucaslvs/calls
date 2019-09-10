@@ -44,16 +44,10 @@ defmodule Calls do
   @spec proccess_call_async(any) :: Task.t()
   def proccess_call_async(call) do
     Task.async(fn ->
-      calculate_duration_and_cost_call(call)
+      call
+      |> create_call()
+      |> calculate_duration_and_cost_call()
     end)
-  end
-
-  @spec calculate_duration_and_cost_call(<<_::360>>) :: Calls.Call.t()
-  def calculate_duration_and_cost_call(call) do
-    call
-    |> create_call()
-    |> Call.calcutate_duration()
-    |> Call.calculate_cost()
   end
 
   @spec create_call(<<_::360>>) :: :ok | Calls.Call.t()
@@ -81,6 +75,13 @@ defmodule Calls do
       {:error, :invalid_call} ->
         IO.puts("Invalid call register")
     end
+  end
+
+  @spec calculate_duration_and_cost_call(Calls.Call.t()) :: Calls.Call.t()
+  def calculate_duration_and_cost_call(%Call{} = call) do
+    call
+    |> Call.calcutate_duration()
+    |> Call.calculate_cost()
   end
 
   @spec disregard_longer_call(any) :: [Calls.Call.t()]
